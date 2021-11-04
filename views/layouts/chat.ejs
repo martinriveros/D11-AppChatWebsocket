@@ -1,0 +1,16 @@
+<%- include("../templates/header", {title:"Desafio11"}) %>
+<h2>ALTA DE PRODUCTOS</h2>
+
+<form id="formularioEnvioDatos">
+  <label for="nombreProd">Nombre</label>
+  <input type="text" id="nombreProd" name="name" /><br />
+  <label for="thumbProd">Price</label>
+  <input type="number" id="precioProd" name="price" /><br />
+  <label for="thumbProd">Foto URL</label>
+  <input type="text" id="thumbProd" name="thumbnail" /><br />
+  <input type="submit" id="sendData" value="Enviar!" />
+</form>
+<h2>VISTA DE PRODUCTOS</h2>
+<%- include("../templates/table", {noProductos:true, responseObjectTotal:[{}]})
+%><%- include("../templates/messageCenter") %><%- include("../templates/footer")
+%>
