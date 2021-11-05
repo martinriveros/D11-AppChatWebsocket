@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const router = Router();
 const path = require('path')
-const rerender = require('../utils/rerender.js')
 
 module.exports = (app)=> {
 
@@ -12,6 +11,9 @@ module.exports = (app)=> {
      })
     router.get('/updatedTable', (req, res)=>{
        res.sendFile(path.join(__dirname, '../views/templates/table.ejs'))        
+    })
+    router.get('/updatedMessage', (req, res)=>{
+       res.sendFile(path.join(__dirname, '../views/templates/messageCenter.ejs'))        
     })
 }
 

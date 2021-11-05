@@ -1,13 +1,22 @@
 const socket = io();
 
-let plantilla
+let plantillaTable
+let plantillaMsg
 let responseObjectTotal
+let responseObject
 
 fetch("/chat/updatedTable")
                   .then(response => response.text())
                   .then(template => {
+                  plantillaTable = template
+                  })   
+                  .catch( e =>console.log('some shit happened' + e))
+fetch("/chat/updatedMessage")
+                  .then(response => response.text())
+                  .then(template => {
                   createSocket()
-                  plantilla = template
+                  plantillaMsg = template
+                  
                   })   
                   .catch( e =>console.log('some shit happened' + e))
 
@@ -16,16 +25,19 @@ function createSocket(){
   socket.on('productNotification', socket => {
       socket.length===0? noProductos=true : noProductos=false
       responseObjectTotal = socket
-      if(socket.length!==0) {renderTable(plantilla,noProductos,responseObjectTotal)}
+      if(socket.length!==0){renderTable(noProductos)}
       })
-}
-    
-let formProducts = document.getElementById("formularioEnvioDatos")
-let injectedProductsTable = document.querySelector("#tableInjection")
-formProducts.addEventListener("submit", sendNewProduct);
+  
+  socket.on('messageNotification', socket => {
+    socket.length===0? noMensajes=true : noMensajes=false
+    responseObject = socket
+      if(socket.length!==0){renderMsg(noMensajes)}
+      })
+    }
 
 function sendNewProduct(e){
   e.preventDefault()
+
   responseObject={
     name: e.srcElement[0].value,
     price: e.srcElement[1].value,
@@ -33,23 +45,6 @@ function sendNewProduct(e){
   }
   socket.emit('productNotification', responseObject)
 };
-  
-function renderTable(){
-  injectedProductsTable.innerHTML = ejs.render(plantilla, {noProductos, responseObjectTotal})}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-
-let formMsj = document.getElementById("formularioEnvioMensajes")
-formMsj.addEventListener("submit", formularioEnvioMensajes);
-
-// let  email = document.querySelector('#email')
-// let  fechayhora = document.querySelector('#fechayhora')
-// let  texto = document.querySelector('#texto')
-
-let injectedMessages = document.querySelector('#injectedMessages')
-
 
 function formularioEnvioMensajes(e){
   e.preventDefault()
@@ -61,15 +56,17 @@ function formularioEnvioMensajes(e){
   }
   socket.emit('messageNotification', responseObject)
 };
+function renderTable(noProductos){
+  injectedProductsTable.innerHTML = ejs.render(plantillaTable, {noProductos, responseObjectTotal})}
 
-socket.on('messageNotification', socket => {
-  if(socket.length!==0){
-  let htmlMessage=''
-  socket.forEach(element => {
-                
-    
-    htmlMessage+=`<span id="email">${element.email}</span><span id="fechayhora">${element.moment}</span><span id="texto">${element.message}</span></br>`
+function renderMsg(noMensajes){
+  injectedMessages.innerHTML = ejs.render(plantillaMsg, {noMensajes, responseObject})}
 
-  })
-  injectedMessages.innerHTML = htmlMessage}
-})
+let formProducts = document.getElementById("formularioEnvioDatos")
+let injectedProductsTable = document.querySelector("#tableInjection")
+formProducts.addEventListener("submit", sendNewProduct);
+
+let formMsj = document.getElementById("formularioEnvioMensajes")
+formMsj.addEventListener("submit", formularioEnvioMensajes);
+
+let injectedMessages = document.querySelector('#injectedMessages')

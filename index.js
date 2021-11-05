@@ -7,8 +7,7 @@ const {Server: HttpServer} = require('http')    // los modulos tienen la clase S
 const {Server: IOServer} = require('socket.io');// los modulos tienen la clase Server, se renombra.
 const {config}  = require('./config/index.js'); // no hace falta indicarle index.js, es por defecto.
 const serverRoutes = require('./routes/routes.js');
-// const startSocket = require('./components/socket')
-var exphbs  = require('express-handlebars'); 
+const {saveProductData,saveMessageData} = require('./utils/saveData.js')
 
 // inicializations
 const app = express();
@@ -33,7 +32,6 @@ serverRoutes(app);
 
 let responseObjectTotal=[]
 let responseObject=[]
-let responseMsgTotal=[]
 
 io.on('connection', socket => {
       console.log('conexion websocket establecida')
@@ -41,27 +39,16 @@ io.on('connection', socket => {
     io.sockets.emit('productNotification', responseObjectTotal)
     socket.on('productNotification', socket => {
       responseObjectTotal.push(socket)
+      
+      
       io.sockets.emit('productNotification', responseObjectTotal)
+    saveProductData(responseObjectTotal)
     })
-
     io.sockets.emit('messageNotification', responseObject)
     socket.on('messageNotification', socket => {
       responseObject.push(socket)
+      saveMessageData(responseObject)
       io.sockets.emit('messageNotification', responseObject)
     })
-
-
-
-
-
-
-
-
   })
-    
-
-  
-
-
-
 httpServer.listen(PORT, ()=>{console.log('server on fire, listening dotenv', PORT, config.email_support)});

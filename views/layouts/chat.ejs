@@ -12,5 +12,12 @@
 </form>
 <h2>VISTA DE PRODUCTOS</h2>
 <%- include("../templates/table", {noProductos:true, responseObjectTotal:[{}]})
-%><%- include("../templates/messageCenter") %><%- include("../templates/footer")
 %>
+<h2>CONTRO DE MENSAJES</h2>
+<form id="formularioEnvioMensajes">
+  <input type="text" placeholder="direccion de email" name="email" required />
+  <input type="text" placeholder="Su calido mensaje" name="message" />
+  <input type="submit" value="Enviar!" />
+</form>
+<%- include("../templates/messageCenter", {noMensajes:true,
+responseObject:[{}]}) %><%- include("../templates/footer") %>
