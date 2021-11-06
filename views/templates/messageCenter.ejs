@@ -3,7 +3,12 @@
   <p>Se el primero en dejar un mensaje</p>
   <% } else {%> <% responseObject.forEach(element => { %>
   <span id="email"><%= element.email %></span
-  ><span id="fechayhora"><%= element.moment %></span>
+  ><span class="fechayhora"> <%= element.moment.day %>/</span>
+  <span class="fechayhora"><%= element.moment.month %>/</span>
+  <span class="fechayhora"><%= element.moment.year %></span>
+  <span class="fechayhora"><%= element.moment.hour %>:</span>
+  <span class="fechayhora"><%= element.moment.minute %>:</span>
+  <span class="fechayhora"><%= element.moment.second %></span>
   <span id="texto"><%= element.message %></span><br />
 
   <% }); %> <% } %>
